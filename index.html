@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aziz Camara — The Story</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* ===========================================
+           THEME: Paper & Ink — Black on White Editorial
+           =========================================== */
+        :root {
+            --bg: #ffffff;
+            --bg-alt: #f8f7f4;
+            --text: #111111;
+            --text-secondary: #555555;
+            --accent: #000000;
+            --accent-light: #e8e8e8;
+            --font-display: 'Cormorant Garamond', Georgia, serif;
+            --font-body: 'Inter', -apple-system, sans-serif;
+            --title-size: clamp(2rem, 6vw, 5rem);
+            --h2-size: clamp(1.5rem, 4vw, 3rem);
+            --h3-size: clamp(1.1rem, 2.5vw, 1.5rem);
+            --body-size: clamp(0.8rem, 1.4vw, 1.05rem);
+            --small-size: clamp(0.7rem, 1vw, 0.85rem);
+            --slide-padding: clamp(1.5rem, 5vw, 5rem);
+            --content-gap: clamp(0.5rem, 2vw, 2rem);
+            --ease: cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html {
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+            height: 100%;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+            height: 100%;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ===========================================
+           SLIDE BASE
+           =========================================== */
+        .slide {
+            width: 100vw;
+            height: 100vh;
+            height: 100dvh;
+            overflow: hidden;
+            scroll-snap-align: start;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            padding: var(--slide-padding);
+        }
+
+        .slide-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            max-height: 100%;
+            overflow: hidden;
+        }
+
+        /* ===========================================
+           TYPOGRAPHY
+           =========================================== */
+        h1 {
+            font-family: var(--font-display);
+            font-size: var(--title-size);
+            font-weight: 300;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+        }
+
+        h2 {
+            font-family: var(--font-display);
+            font-size: var(--h2-size);
+            font-weight: 300;
+            line-height: 1.15;
+            letter-spacing: -0.01em;
+        }
+
+        h3 {
+            font-family: var(--font-display);
+            font-size: var(--h3-size);
+            font-weight: 600;
+            line-height: 1.3;
+        }
+
+        p, li {
+            font-size: var(--body-size);
+            line-height: 1.6;
+            font-weight: 300;
+        }
+
+        .label {
+            font-family: var(--font-body);
+            font-size: var(--small-size);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .serif-italic {
+            font-family: var(--font-display);
+            font-style: italic;
+            font-weight: 300;
+        }
+
+        strong { font-weight: 600; }
+
+        a {
+            color: var(--text);
+            text-decoration: none;
+            border-bottom: 1px solid var(--text);
+            transition: opacity 0.3s;
+        }
+        a:hover { opacity: 0.6; }
+
+        /* ===========================================
+           ANIMATIONS
+           =========================================== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(25px);
+            transition: opacity 0.8s var(--ease), transform 0.8s var(--ease);
+        }
+        .slide.visible .reveal {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .reveal:nth-child(2) { transition-delay: 0.12s; }
+        .reveal:nth-child(3) { transition-delay: 0.24s; }
+        .reveal:nth-child(4) { transition-delay: 0.36s; }
+        .reveal:nth-child(5) { transition-delay: 0.48s; }
+        .reveal:nth-child(6) { transition-delay: 0.6s; }
+
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(-40px);
+            transition: opacity 0.8s var(--ease), transform 0.8s var(--ease);
+        }
+        .slide.visible .reveal-left { opacity: 1; transform: translateX(0); }
+
+        .reveal-right {
+            opacity: 0;
+            transform: translateX(40px);
+            transition: opacity 0.8s var(--ease), transform 0.8s var(--ease);
+        }
+        .slide.visible .reveal-right { opacity: 1; transform: translateX(0); }
+
+        .reveal-scale {
+            opacity: 0;
+            transform: scale(0.92);
+            transition: opacity 0.8s var(--ease), transform 0.8s var(--ease);
+        }
+        .slide.visible .reveal-scale { opacity: 1; transform: scale(1); }
+
+        /* ===========================================
+           SLIDE LAYOUTS
+           =========================================== */
+
+        /* Title slide */
+        .title-slide {
+            background: var(--bg);
+            align-items: center;
+            text-align: center;
+        }
+        .title-slide .profile-img {
+            width: clamp(100px, 15vw, 180px);
+            height: clamp(100px, 15vw, 180px);
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: clamp(1rem, 2vw, 2rem);
+            filter: grayscale(100%);
+            transition: filter 0.6s;
+        }
+        .title-slide:hover .profile-img { filter: grayscale(0%); }
+        .title-slide .subtitle {
+            font-family: var(--font-body);
+            font-size: var(--body-size);
+            color: var(--text-secondary);
+            font-weight: 300;
+            margin-top: clamp(0.5rem, 1vw, 1rem);
+            max-width: 600px;
+        }
+        .title-slide .contact-line {
+            margin-top: clamp(0.75rem, 1.5vw, 1.5rem);
+            font-size: var(--small-size);
+            color: var(--text-secondary);
+        }
+
+        /* Split slide */
+        .split {
+            flex-direction: row;
+            padding: 0;
+        }
+        .split-left, .split-right {
+            width: 50%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .split-left { padding: var(--slide-padding); }
+        .split-right {
+            position: relative;
+        }
+        .split-right img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Dark slide */
+        .dark-slide {
+            background: #111;
+            color: #fff;
+        }
+        .dark-slide .label { color: #888; }
+        .dark-slide .stat-number { color: #fff; }
+        .dark-slide a { color: #fff; border-color: #fff; }
+
+        /* Stats grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
+            gap: clamp(0.75rem, 2vw, 1.5rem);
+            margin-top: clamp(1rem, 2vw, 2rem);
+        }
+        .stat {
+            padding: clamp(0.5rem, 1.5vw, 1.5rem);
+            border-left: 2px solid var(--accent);
+        }
+        .dark-slide .stat { border-color: #444; }
+        .stat-number {
+            font-family: var(--font-display);
+            font-size: clamp(1.5rem, 4vw, 3rem);
+            font-weight: 300;
+            line-height: 1;
+        }
+        .stat-label {
+            font-size: var(--small-size);
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+            font-weight: 400;
+        }
+
+        /* Logo strip */
+        .logo-strip {
+            display: flex;
+            align-items: center;
+            gap: clamp(1rem, 3vw, 2.5rem);
+            flex-wrap: wrap;
+            margin-top: clamp(1rem, 2vw, 2rem);
+        }
+        .logo-strip img {
+            height: clamp(20px, 3vw, 35px);
+            opacity: 0.7;
+            filter: grayscale(100%);
+            transition: all 0.3s;
+        }
+        .logo-strip img:hover { opacity: 1; filter: grayscale(0%); }
+
+        /* Video embed */
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: min(85vw, 800px);
+            aspect-ratio: 16/9;
+            margin: clamp(0.5rem, 1.5vw, 1.5rem) auto 0;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+        }
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            border: none;
+        }
+
+        /* Image with caption */
+        .img-showcase {
+            max-height: min(50vh, 400px);
+            width: auto;
+            max-width: 100%;
+            object-fit: contain;
+            border-radius: 4px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        /* Quote */
+        .quote {
+            font-family: var(--font-display);
+            font-size: clamp(1.2rem, 3vw, 2.2rem);
+            font-style: italic;
+            font-weight: 300;
+            line-height: 1.4;
+            max-width: 700px;
+            position: relative;
+            padding-left: clamp(1rem, 3vw, 2.5rem);
+            border-left: 3px solid var(--text);
+        }
+
+        /* Timeline */
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            gap: clamp(0.4rem, 1vh, 0.8rem);
+            margin-top: clamp(0.5rem, 1.5vw, 1.5rem);
+        }
+        .timeline-item {
+            display: flex;
+            align-items: baseline;
+            gap: clamp(0.5rem, 2vw, 1.5rem);
+            padding: clamp(0.3rem, 0.5vw, 0.5rem) 0;
+            border-bottom: 1px solid var(--accent-light);
+        }
+        .timeline-year {
+            font-family: var(--font-display);
+            font-size: var(--body-size);
+            font-weight: 600;
+            min-width: clamp(60px, 8vw, 100px);
+            color: var(--text-secondary);
+        }
+        .timeline-text {
+            font-size: var(--body-size);
+            font-weight: 300;
+        }
+
+        /* Paper card for research */
+        .paper-card {
+            background: var(--bg-alt);
+            padding: clamp(1rem, 2vw, 2rem);
+            border-radius: 4px;
+            border: 1px solid var(--accent-light);
+            margin-top: clamp(0.5rem, 1.5vw, 1.5rem);
+            max-width: 700px;
+        }
+        .paper-card .paper-title {
+            font-family: var(--font-display);
+            font-size: clamp(1rem, 2vw, 1.3rem);
+            font-weight: 600;
+            line-height: 1.3;
+        }
+        .paper-card .paper-meta {
+            font-size: var(--small-size);
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+        }
+        .paper-card .paper-finding {
+            font-size: var(--body-size);
+            margin-top: clamp(0.5rem, 1vw, 0.75rem);
+            font-weight: 300;
+        }
+
+        /* Divider line */
+        .divider {
+            width: 60px;
+            height: 2px;
+            background: var(--text);
+            margin: clamp(0.75rem, 1.5vw, 1.5rem) 0;
+        }
+
+        /* Nav dots */
+        .nav-dots {
+            position: fixed;
+            right: clamp(10px, 2vw, 25px);
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            z-index: 100;
+        }
+        .nav-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            border: 1px solid #999;
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.3s;
+            padding: 0;
+        }
+        .nav-dot.active {
+            background: var(--text);
+            border-color: var(--text);
+            transform: scale(1.3);
+        }
+        .dark-slide ~ .nav-dots .nav-dot { border-color: #666; }
+
+        /* Progress bar */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 2px;
+            background: var(--text);
+            z-index: 200;
+            transition: width 0.3s;
+        }
+
+        /* ===========================================
+           RESPONSIVE
+           =========================================== */
+        @media (max-width: 768px) {
+            .split { flex-direction: column; }
+            .split-left, .split-right { width: 100%; height: 50%; }
+            .split-left { padding: clamp(1rem, 3vw, 2rem); }
+            .nav-dots { display: none; }
+        }
+
+        @media (max-height: 600px) {
+            :root {
+                --slide-padding: clamp(1rem, 3vw, 2rem);
+                --content-gap: clamp(0.3rem, 1vw, 0.75rem);
+            }
+            .nav-dots { display: none; }
+        }
+
+        @media (max-height: 500px) {
+            :root {
+                --title-size: clamp(1.25rem, 5vw, 2rem);
+                --h2-size: clamp(1.1rem, 3.5vw, 1.75rem);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.2s !important;
+            }
+            html { scroll-behavior: auto; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+<nav class="nav-dots" id="navDots"></nav>
+
+<!-- ============ SLIDE 1: TITLE ============ -->
+<section class="slide title-slide">
+    <div class="slide-content" style="align-items:center; text-align:center;">
+        <img src="aziz-story-assets/profile-bw.jpeg" alt="Aziz Camara" class="profile-img reveal">
+        <h1 class="reveal">Aziz Camara</h1>
+        <div class="divider reveal" style="margin:0.75rem auto;"></div>
+        <p class="subtitle reveal">Customer Success & AI Transformation Leader<br>PhD Researcher | Platform Builder | Speaker</p>
+        <p class="contact-line reveal">
+            <a href="https://linkedin.com/in/aziz1904" target="_blank">LinkedIn</a> &nbsp;&middot;&nbsp;
+            azizcamara2@gmail.com &nbsp;&middot;&nbsp;
+            +1 647-916-1159 &nbsp;&middot;&nbsp;
+            Montreal | Toronto | New York
+        </p>
+    </div>
+</section>
+
+<!-- ============ SLIDE 2: THE JOURNEY ============ -->
+<section class="slide">
+    <div class="slide-content">
+        <span class="label reveal">13+ Years</span>
+        <h2 class="reveal">The Journey</h2>
+        <div class="timeline">
+            <div class="timeline-item reveal"><span class="timeline-year">2026</span><span class="timeline-text"><strong>1st Place</strong> — Mila AI Institute Startup Challenge</span></div>
+            <div class="timeline-item reveal"><span class="timeline-year">2025</span><span class="timeline-text"><strong>SXSW Speaker</strong> — Solo 1-hour presentation, Austin TX</span></div>
+            <div class="timeline-item reveal"><span class="timeline-year">2025</span><span class="timeline-text"><strong>Amazon Web Services</strong> — Customer Solutions Manager</span></div>
+            <div class="timeline-item reveal"><span class="timeline-year">2024</span><span class="timeline-text"><strong>Botpress</strong> — Director of Customer Success, $36M Series B</span></div>
+            <div class="timeline-item reveal"><span class="timeline-year">2021–24</span><span class="timeline-text"><strong>VMware → Broadcom</strong> — CS Director, $70M TCV, 100% retention</span></div>
+            <div class="timeline-item reveal"><span class="timeline-year">2018–21</span><span class="timeline-text"><strong>Loblaw</strong> — Sr. Manager, PC Optimum (20M+ members), $210M+</span></div>
+            <div class="timeline-item reveal"><span class="timeline-year">2012–18</span><span class="timeline-text"><strong>Veriforce</strong> — Sr. Manager, 100+ enterprise accounts, Oil & Gas</span></div>
+        </div>
+    </div>
+</section>
+
+<!-- ============ SLIDE 3: ACCOMPLISHMENTS ============ -->
+<section class="slide dark-slide">
+    <div class="slide-content">
+        <span class="label reveal" style="color:#888;">Career Highlights</span>
+        <h2 class="reveal" style="color:#fff;">By the Numbers</h2>
+        <div class="stats-grid">
+            <div class="stat reveal"><div class="stat-number">$300M+</div><div class="stat-label">Managed ARR across F500</div></div>
+            <div class="stat reveal"><div class="stat-number">100%</div><div class="stat-label">Retention over 4 years at VMware</div></div>
+            <div class="stat reveal"><div class="stat-number">300%</div><div class="stat-label">Consumption growth driven</div></div>
+            <div class="stat reveal"><div class="stat-number">$210M+</div><div class="stat-label">Renewals at Loblaw</div></div>
+            <div class="stat reveal"><div class="stat-number">20M+</div><div class="stat-label">Users on PC Optimum platform</div></div>
+            <div class="stat reveal"><div class="stat-number">1st</div><div class="stat-label">Place — Mila Startup Challenge</div></div>
+        </div>
+    </div>
+</section>
+
+<!-- ============ SLIDE 4: SXSW — SPLIT ============ -->
+<section class="slide split">
+    <div class="split-left">
+        <span class="label reveal">SXSW 2025 — Austin, TX</span>
+        <h2 class="reveal" style="margin-top:0.5rem;">Driving AI Transformation Through Customer Success</h2>
+        <div class="divider reveal"></div>
+        <p class="reveal">Solo 1-hour presentation on how AI agents will transform customer success operations — covering enterprise adoption, change management, and the agentic future of CSM.</p>
+        <p class="reveal" style="margin-top:0.75rem; font-size:var(--small-size); color:var(--text-secondary);">
+            <a href="https://youtu.be/Wzeib4FsB6g" target="_blank">Watch the highlight reel &rarr;</a>
+        </p>
+    </div>
+    <div class="split-right reveal-scale">
+        <img src="aziz-story-assets/sxsw-stage.png" alt="Aziz speaking at SXSW 2025">
+    </div>
+</section>
+
+<!-- ============ SLIDE 5: AMCIS RESEARCH ============ -->
+<section class="slide split">
+    <div class="split-left">
+        <span class="label reveal">AMCIS 2025 — Peer-Reviewed</span>
+        <h2 class="reveal" style="margin-top:0.5rem;">Published Research</h2>
+        <div class="paper-card reveal">
+            <div class="paper-title">"How Does Generative AI Impact Software Developer Performance?"</div>
+            <div class="paper-meta">Americas Conference on Information Systems (AMCIS) 2025 &bull; ERF Camera-Ready</div>
+            <div class="paper-finding"><strong>459K records</strong> across 23 major tech companies (Microsoft, Google, Meta, Amazon). Found <strong>+6.9% velocity improvement</strong> post-GenAI adoption with significant heterogeneity by language. Novel TTF-TAM-DORA theoretical framework.</div>
+        </div>
+    </div>
+    <div class="split-right reveal-scale">
+        <img src="aziz-story-assets/amcis.jpg" alt="AMCIS Conference Presentation">
+    </div>
+</section>
+
+<!-- ============ SLIDE 7: PHD RESEARCH ============ -->
+<section class="slide">
+    <div class="slide-content">
+        <span class="label reveal">Universit&eacute; Paris Dauphine-PSL</span>
+        <h2 class="reveal">Ph.D. Research</h2>
+        <div class="divider reveal"></div>
+        <p class="quote reveal">"Faster But Not Better" — AI coding tools increase developer throughput by +27%, but show no significant effect on code quality or delivery speed.</p>
+        <div class="stats-grid" style="margin-top:clamp(1rem,2vw,2rem);">
+            <div class="stat reveal"><div class="stat-number">500</div><div class="stat-label">Open-source repositories</div></div>
+            <div class="stat reveal"><div class="stat-number">65M+</div><div class="stat-label">Raw events analyzed</div></div>
+            <div class="stat reveal"><div class="stat-number">87</div><div class="stat-label">Months of data (2019–2026)</div></div>
+            <div class="stat reveal"><div class="stat-number">14</div><div class="stat-label">Causal estimators converge</div></div>
+        </div>
+    </div>
+</section>
+
+<!-- ============ SLIDE 8: CSCX.AI ============ -->
+<section class="slide dark-slide">
+    <div class="slide-content" style="align-items:center; text-align:center;">
+        <h1 class="reveal" style="color:#fff; font-size:clamp(2rem,6vw,4rem); font-weight:300; letter-spacing:0.05em;">CSCX.AI</h1>
+        <h2 class="reveal" style="color:#fff; margin-top:0.5rem;">AI-Native Customer Success Platform</h2>
+        <div class="divider reveal" style="background:#444; margin:0.75rem auto;"></div>
+        <p class="reveal" style="max-width:650px; text-align:center; color:#aaa;">10 specialist agents &bull; 4-tier intelligent routing &bull; RAG knowledge retrieval &bull; Vision-based contract parsing &bull; Real-time customer intelligence &bull; 173 API routes</p>
+        <div class="stats-grid reveal" style="max-width:700px; margin-top:clamp(1rem,2vw,2rem);">
+            <div class="stat"><div class="stat-number" style="color:#fff;">10</div><div class="stat-label" style="color:#888;">Specialist Agents</div></div>
+            <div class="stat"><div class="stat-number" style="color:#fff;">173</div><div class="stat-label" style="color:#888;">API Routes</div></div>
+            <div class="stat"><div class="stat-number" style="color:#fff;">React 19</div><div class="stat-label" style="color:#888;">TypeScript + Express</div></div>
+        </div>
+        <p class="reveal" style="margin-top:1rem; font-size:var(--small-size); color:#666;">Google Gemini &bull; Claude API &bull; Supabase PostgreSQL &bull; Google Cloud Run</p>
+    </div>
+</section>
+
+<!-- ============ SLIDE 9: ENTERPRISE EXPERIENCE ============ -->
+<section class="slide">
+    <div class="slide-content">
+        <span class="label reveal">Enterprise Impact</span>
+        <h2 class="reveal">Trusted by Industry Leaders</h2>
+        <div class="divider reveal"></div>
+        <p class="reveal" style="max-width:650px;">13+ years leading technical transformation for F500 enterprises — from cloud migration and platform engineering at VMware to AI adoption at AWS and Botpress.</p>
+        <p class="reveal" style="margin-top:clamp(0.75rem,1.5vw,1.5rem); font-family:var(--font-display); font-size:clamp(0.95rem,1.8vw,1.2rem); font-weight:400; line-height:1.8; color:var(--text-secondary);">
+            Amazon Web Services &nbsp;&bull;&nbsp; Botpress &nbsp;&bull;&nbsp; VMware / Broadcom &nbsp;&bull;&nbsp; Pivotal &nbsp;&bull;&nbsp; Loblaw Companies &nbsp;&bull;&nbsp; Veriforce &nbsp;&bull;&nbsp; Desjardins &nbsp;&bull;&nbsp; Scotiabank &nbsp;&bull;&nbsp; Department of National Defense &nbsp;&bull;&nbsp; P&amp;G &nbsp;&bull;&nbsp; Coca-Cola &nbsp;&bull;&nbsp; Johnson &amp; Johnson &nbsp;&bull;&nbsp; L'Or&eacute;al &nbsp;&bull;&nbsp; PepsiCo
+        </p>
+        <div class="stats-grid" style="margin-top:clamp(1rem,2vw,1.5rem);">
+            <div class="stat reveal"><div class="stat-number">$70M</div><div class="stat-label">TCV Portfolio at VMware</div></div>
+            <div class="stat reveal"><div class="stat-number">120%</div><div class="stat-label">Renewal attainment</div></div>
+            <div class="stat reveal"><div class="stat-number">$36M</div><div class="stat-label">Series B supported at Botpress</div></div>
+            <div class="stat reveal"><div class="stat-number">$300M+</div><div class="stat-label">Total career renewals</div></div>
+        </div>
+    </div>
+</section>
+
+<!-- ============ SLIDE 11: CONNECT ============ -->
+<section class="slide title-slide">
+    <div class="slide-content" style="align-items:center; text-align:center;">
+        <img src="aziz-story-assets/profile.jpeg" alt="Aziz Camara" class="profile-img reveal" style="filter:none;">
+        <h1 class="reveal" style="font-size:var(--h2-size);">Let's Connect</h1>
+        <div class="divider reveal" style="margin:0.75rem auto;"></div>
+        <p class="reveal" style="font-size:var(--body-size); color:var(--text-secondary); max-width:500px;">
+            Building at the intersection of AI, Customer Success, and academic research.<br>Always open to meaningful conversations.
+        </p>
+        <div class="reveal" style="margin-top:clamp(1rem,2vw,2rem); display:flex; gap:2rem; flex-wrap:wrap; justify-content:center;">
+            <a href="https://linkedin.com/in/aziz1904" target="_blank" style="font-size:var(--body-size);">LinkedIn &rarr;</a>
+            <a href="mailto:azizcamara2@gmail.com" target="_blank" rel="noopener" style="font-size:var(--body-size);">azizcamara2@gmail.com &rarr;</a>
+            <a href="https://youtu.be/Wzeib4FsB6g" target="_blank" style="font-size:var(--body-size);">SXSW Video &rarr;</a>
+        </div>
+        <p class="reveal" style="margin-top:1.5rem; font-size:var(--small-size); color:#999;">
+            Canadian Citizen &bull; TN Visa Eligible &bull; Bilingual: English &amp; French
+        </p>
+    </div>
+</section>
+
+<script>
+    /* ===========================================
+       SLIDE PRESENTATION CONTROLLER
+       =========================================== */
+    class SlidePresentation {
+        constructor() {
+            this.slides = document.querySelectorAll('.slide');
+            this.progressBar = document.getElementById('progressBar');
+            this.navDotsContainer = document.getElementById('navDots');
+            this.currentSlide = 0;
+            this.init();
+        }
+
+        init() {
+            this.createNavDots();
+            this.setupObserver();
+            this.setupKeyboard();
+            this.updateProgress();
+            window.addEventListener('scroll', () => this.updateProgress());
+        }
+
+        createNavDots() {
+            this.slides.forEach((_, i) => {
+                const dot = document.createElement('button');
+                dot.className = 'nav-dot';
+                dot.setAttribute('aria-label', `Go to slide ${i + 1}`);
+                dot.addEventListener('click', () => {
+                    this.slides[i].scrollIntoView({ behavior: 'smooth' });
+                });
+                this.navDotsContainer.appendChild(dot);
+            });
+            this.dots = document.querySelectorAll('.nav-dot');
+        }
+
+        setupObserver() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        const index = Array.from(this.slides).indexOf(entry.target);
+                        this.currentSlide = index;
+                        this.dots.forEach((d, i) => d.classList.toggle('active', i === index));
+
+                        // Adjust nav dot colors for dark slides
+                        const isDark = entry.target.classList.contains('dark-slide');
+                        this.navDotsContainer.style.setProperty('--dot-color', isDark ? '#fff' : '#111');
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            this.slides.forEach(slide => observer.observe(slide));
+        }
+
+        setupKeyboard() {
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowDown' || e.key === ' ' || e.key === 'ArrowRight') {
+                    e.preventDefault();
+                    const next = Math.min(this.currentSlide + 1, this.slides.length - 1);
+                    this.slides[next].scrollIntoView({ behavior: 'smooth' });
+                } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+                    e.preventDefault();
+                    const prev = Math.max(this.currentSlide - 1, 0);
+                    this.slides[prev].scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        }
+
+        updateProgress() {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+            this.progressBar.style.width = progress + '%';
+        }
+    }
+
+    new SlidePresentation();
+</script>
+</body>
+</html>
